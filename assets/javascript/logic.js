@@ -16,7 +16,7 @@ $('#addButton').on('click', function(event){
     event.preventDefault();
     let train = $('#trainInput').val().trim();
     let destination = $('#destinationInput').val().trim();
-    let firstTrain = $('#firstTrainInput').val().trim();
+    let firstTrain = $("#firstTrainInput").val().trim();  
     let frequency = $('#frequencyInput').val().trim();
         fireTrain.push({
             trainName: train,
@@ -24,10 +24,14 @@ $('#addButton').on('click', function(event){
             firstTrainTime: firstTrain,
             trainFrequency: frequency
         });
-        console.log(train);
-        console.log(destination);
+        // console.log(train);
+        // console.log(destination);
         console.log(firstTrain);
-        console.log(frequency);
+        // console.log(frequency);
+    $('#trainInput').val("");
+    $('#destinationInput').val('');
+    $('#firstTrainInput').val('');
+    $('#frequencyInput').val('');
 });
 
 fireTrain.on('child_added', function(snap) {
@@ -35,16 +39,17 @@ fireTrain.on('child_added', function(snap) {
     let destination = snap.val().trainDestination;
     let firstTrain = snap.val().firstTrainTime;
     let frequency = snap.val().trainFrequency;
-    let nextArrival = moment().diff(moment(snap.val().firstTrainTime), 'minutes');
+    // let nextArrival = moment().diff(moment(firstTrain), 'minutes');
+    let timeTest = moment(firstTrain, 'HH:mm').subtract(1, 'years');
     // let minutesAway = frequency - nextArrival;
     // console.log(moment().format("DD/MM/YY hh:mm A"));
     // let minutesAway = nextArrival - firstTrain;
-    console.log(nextArrival);
+    console.log(timeTest);
     // console.log(minutesAway);
-    console.log(train);
-    console.log(destination);
-    console.log(firstTrain);
-    console.log(frequency);
+    // console.log(train);
+    // console.log(destination);
+    // console.log(firstTrain);
+    // console.log(frequency);
     $('#trainTable').append(
         '<tr><td>' + train + '</td>' +
         '<td>' + destination + '</td>' +
