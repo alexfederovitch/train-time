@@ -16,7 +16,7 @@ $('#addButton').on('click', function(event){
     event.preventDefault();
     let train = $('#trainInput').val().trim();
     let destination = $('#destinationInput').val().trim();
-    let firstTrain = $("#firstTrainInput").val().trim();  
+    let firstTrain = moment($("#firstTrainInput").val().trim(), "HH:mm").subtract(10, 'years').format('x');  
     let frequency = $('#frequencyInput').val().trim();
         fireTrain.push({
             trainName: train,
@@ -26,7 +26,7 @@ $('#addButton').on('click', function(event){
         });
         // console.log(train);
         // console.log(destination);
-        console.log(firstTrain);
+        // console.log(firstTrain);
         // console.log(frequency);
     $('#trainInput').val("");
     $('#destinationInput').val('');
@@ -39,12 +39,18 @@ fireTrain.on('child_added', function(snap) {
     let destination = snap.val().trainDestination;
     let firstTrain = snap.val().firstTrainTime;
     let frequency = snap.val().trainFrequency;
+    let r  = moment().diff(moment.unix(firstTrain), 'minutes')%frequency;
+    let minutesAway = frequency - r;
+    let nextArrival = moment().add(minutesAway, 'm').format('hh:mm A')
+
     // let nextArrival = moment().diff(moment(firstTrain), 'minutes');
-    let timeTest = moment(firstTrain, 'HH:mm').subtract(1, 'years');
+    // let timeTest = moment(firstTrain, 'HH:mm').subtract(1, 'years');
     // let minutesAway = frequency - nextArrival;
     // console.log(moment().format("DD/MM/YY hh:mm A"));
     // let minutesAway = nextArrival - firstTrain;
-    console.log(timeTest);
+    console.log(nextArrival);
+    console.log(minutesAway);
+    // console.log(timeTest);
     // console.log(minutesAway);
     // console.log(train);
     // console.log(destination);
@@ -54,8 +60,8 @@ fireTrain.on('child_added', function(snap) {
         '<tr><td>' + train + '</td>' +
         '<td>' + destination + '</td>' +
         '<td>' + frequency + '</td>' +
-        '<td>To be filled in later</td>' +
-        '<td>To be filled in later</td></tr>'
+        '<td>' + nextArrival + '</td>' +
+        '<td>' + minutesAway + '</td></tr>'
     )
     }, function (errorObject) {
         console.log("The Read Failed", errorObject.code);
